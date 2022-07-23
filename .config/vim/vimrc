@@ -1,0 +1,43 @@
+" ┌───────────────────────── ─ ─   ─
+" │ ~/.config/vim/vimrc
+" └───────────────────────── ─ ─   ─
+
+set encoding=utf-8
+
+" ····· to avoid some bugs and limitations.
+set nocompatible
+
+" ····· dissociate data for vim and nvim !
+if has('nvim')
+  let $VIM='nvim'
+else
+  let $VIM='vim'
+endif
+
+" ····· environment variables
+let $VIMHOME=$XDG_CONFIG_HOME.'/vim/'
+let $VIMDATA=$XDG_DATA_HOME.'/vim/'
+let $MYVIMRC=$VIMHOME.'vimrc'
+let &runtimepath.=','.$VIMHOME.','.$VIMDATA
+
+" ····· data directories
+for i in ['undodir', 'swap', 'backupdir', 'viewdir', 'spell']
+  execute "let $".i."='".$XDG_DATA_HOME."/vim/".i."'"
+  execute "silent call mkdir ($".i.", 'p')"
+endfor
+set undodir=$undodir
+set directory=$swap
+set backupdir=$backupdir
+set viewdir=$viewdir
+
+" ····· source all config files
+"       https://stackoverflow.com/questions/4500748/how-to-source-all-vim-files-in-directory/4501821#4501821
+runtime! vimrc.d/*.vim
+
+" ····· autoreload config
+if has("autocmd")
+   autocmd! bufwritepost $MYVIMRC,$MYVIMRC.d/* silent mkview | source % | :call _SetTheme() | silent loadview
+endif
+
+set background=dark
+call _SetTheme()

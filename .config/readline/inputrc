@@ -1,0 +1,28 @@
+# ┌───────────────────────── ─ ─   ─
+# │ ~/.config/readline/inputrc
+# └───────────────────────── ─ ─   ─
+# see all function with the command:
+#     bind -P
+
+# ····· include default configuration
+$include /etc/inputrc
+
+# ····· emacs chords
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+
+# ····· avoid to print ^C when <C-c> is pressed
+set echo-control-characters off
+
+# ····· move in history
+"\e[A":history-search-backward
+"\e[B":history-search-forward
+
+# ····· map Ctrl-left-arrow and Ctrl-right-arrow for word moving
+#       https://github.com/vlucas/dotfiles-fresh/blob/master/config/inputrc
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+"\e[5C": forward-word
+"\e[5D": backward-word
+"\e\e[C": forward-word
+"\e\e[D": backward-word

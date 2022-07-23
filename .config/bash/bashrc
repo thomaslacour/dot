@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# ┌───────────────────────── ─ ─   ─
+# │ ~/.config/bash/bashrc
+# └───────────────────────── ─ ─   ─
+
+# //// If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# //// macros
+_source () { [ -f $1 ] && source $1; }
+_bind () { [ -f $1 ] && bind -f $1; }
+
+# //// environment variables
+BASHRC=$XDG_CONFIG_HOME"/bash/bashrc"
+
+# //// misc
+shopt -s globstar # ** powa
+shopt -s nullglob # check for *.foo
+
+# ///// Disable ctrl-s and ctrl-q.
+stty -ixon
+
+# //// vi mode in bash prompt
+set -o vi
+
+# //// readline
+INPUTRC=$XDG_CONFIG_HOME"/readline/inputrc"
+for f in ${INPUTRC}{,.d/*}; do _bind $f; done >/dev/null 2>&1
+
+# //// source functions for bash, nomenclature
+_source default
+for f in ${BASHRC}.d/*.sh; do _source $f; done >/dev/null 2>&1
+
+# //// source completion for bash
+for f in ${XDG_CONFIG_HOME}/bash/completion/*.bash; do _source $f; done >/dev/null 2>&1
+
+unset -f _source _bind
+
+# //// go to last directory
+[ -f $XDG_CACHE_HOME'/bash/lastdirectory' ] && cd `cat ${XDG_CACHE_HOME}/bash/lastdirectory` 2> /dev/null

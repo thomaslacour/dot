@@ -1,0 +1,7 @@
+$if Bash
+
+  # ····· toggle python venv
+  ";p": "\C-e\C-utoggle_venv\n"
+
+$endif
+

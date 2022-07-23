@@ -1,0 +1,13 @@
+# ····· sets every completion which is a symbolic link to a directory to have a slash appended
+set mark-symlinked-directories On
+
+# ····· completion
+set completion-ignore-case On
+set completion-prefix-display-length 3
+set show-all-if-unmodified on
+
+# ····· sets the completions to be listed immediately
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+set visible-stats On
+set convert-meta Off

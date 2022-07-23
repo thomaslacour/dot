@@ -1,0 +1,39 @@
+$if Bash
+
+  # ····· clear the screen
+  ";l": clear-screen
+  "\C-L": clear-screen
+
+  # ····· show running jobs
+  ";j": "\C-e\C-ujobs\n"
+
+  # ····· exit shell
+  ";q": "\C-e\C-uexit\015"
+
+  # ····· add sudo in front of the command
+  ";s": "\C-asudo \C-e"
+
+  # ····· open man page for the command
+  ";m": '\C-aman \ef\C-k\n'
+
+  # ····· open editor
+  ";e": "vim -p "
+
+  # ····· show git statuts
+  ";g": "git status --porcelain 2> /dev/null\015"
+
+  # ····· reload bash config
+  ";r": "\C-e\C-usource $BASHRC\n"
+
+  # ····· resume last jobs
+  ";z": "\C-e\C-ufg\n"
+
+  # ····· completion
+  TAB: menu-complete
+  "\e[Z": menu-complete-backward
+
+$endif
+
+$if Python
+
+$endif

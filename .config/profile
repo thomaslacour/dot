@@ -1,0 +1,32 @@
+# ┌───────────────────────── ─ ─   ─
+# │ ~/.config/profile
+# └───────────────────────── ─ ─   ─
+
+
+# ····· do nothing if not interactive
+#       avoid issues at login
+#       VIM TERMINAL IS NOT INTERACTIVE BY DEFAULT
+[[ $- != *i* ]] && return
+
+# ····· profile directory
+#
+p=$HOME"/.config/profile.d"
+
+# ····· load profile files
+#
+if [ -d $p ] ; then
+    for file in $p/*.sh ; do
+      source $file >/dev/null 2>&1
+    done
+    unset file p
+fi
+
+# ····· load shell config files
+#
+case $(echo $SHELL | sed "s/.*\///g") in
+    bash) # if bash
+        source $XDG_CONFIG_HOME"/bash/bashrc"
+        ;;
+    *)    # else
+        ;;
+esac
