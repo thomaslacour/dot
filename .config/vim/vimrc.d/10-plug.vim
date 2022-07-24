@@ -34,7 +34,7 @@ Plug 'pacha/vem-statusline',          { 'as':'vim.statusline', 'dir':$VIMHOME.'/
 Plug 'junegunn/goyo.vim',             { 'as':'plug.goyo' }
 Plug 'airblade/vim-gitgutter',        { 'as':'plug.gitgutter'} | let g:gitgutter_enabled = 0
 Plug 'voldikss/vim-floaterm',         { 'as':'plug.floaterm' } | let g:floaterm_keymap_toggle = '<F12>' | let g:floaterm_autoclose=2
-Plug 'neoclide/coc.nvim',             { 'as':'plug.coc', 'branch': 'release' }
+" Plug 'neoclide/coc.nvim',             { 'as':'plug.coc', 'branch': 'release' }
 " Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown', { 'as':'markdown' }
 
 Plug 'github/copilot.vim',            { 'as':'plug.copilot' }

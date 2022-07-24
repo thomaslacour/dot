@@ -33,31 +33,28 @@ if [ ! -f "$SSH_KEY_GITHUB" ]; then
 fi
 ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-# initialize bare repo
-mkdir -p ~/.dot
-echo ":: git init --bare $HOME/.dot"
-git init --bare $HOME/.dot -b main
-
-# git
+echo ":: git clone $REPO in $TMP"
+git clone $REPO $TMPDIR
 
 dot() {
-  git --git-dir=$HOME/.dot --work-tree=$HOME "$@"
+  git --git-dir=.dot --work-tree=. "$@"
 }
 
-echo ":: git remote add origin git@github.com:thomaslacour/dot.git"
-dot remote add origin git@github.com:thomaslacour/dot.git
+rm -rf .dot
+mv "$TMPDIR/.git" .dot
+
+rm -rf $TMPDIR
+
+echo "git remote set-url origin git@github.com:thomaslacour/dot.git"
 dot remote set-url origin git@github.com:thomaslacour/dot.git
+
 echo ":: git config ..."
 dot config --local status.showUntrackedFiles no
 dot config user.email $MAIL
 dot config user.name $USERNAME
-echo ":: add ssh key to github ..."
-dot fetch >/dev/null 2>&1
-echo ":: git pull origin main"
-read -p ":: Are you sure you want to reset your dotfiles, bro? " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-fi
-dot reset --hard origin/main
+
+echo ":: backup your files on branch 'backup' ..."
+dot switch -c backup
+dot add -u
+dot commit -m "backup"
+dot checkout main
