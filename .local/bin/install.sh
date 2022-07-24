@@ -47,6 +47,8 @@ rm -rf $TMPDIR
 
 echo "git remote set-url origin git@github.com:thomaslacour/dot.git"
 dot remote set-url origin git@github.com:thomaslacour/dot.git
+dot remote set-url origin git@github.com:thomaslacour/dot.git
+dot push --set-upstream origin main
 
 echo ":: git config ..."
 dot config --local status.showUntrackedFiles no
