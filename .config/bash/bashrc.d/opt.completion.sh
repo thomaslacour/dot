@@ -1,8 +1,13 @@
+# -- completion:git
+source /usr/share/bash-completion/completions/git
+
+
 # -- completion:SSH
 #       Add tab completion for SSH hostnames based
 #       on $HOME/.config/ssh/config, ignoring wildcards
 #       https://github.com/pahen/dotfiles/blob/master/.completions#L26
-[ -e "$HOME/.config/ssh/config" ] && complete -o default -o nospace -W "$(grep "^Host" $XDG_CONFIG_HOME/ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
+[ -e $SSH_CONFIG ] && complete -o default -o nospace -W "$(grep "^Host" $SSH_CONFIG | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
+
 
 # -- completion:KILL
 #       Add case-insensitive `kill` tab completion of running apps
