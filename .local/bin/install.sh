@@ -1,4 +1,4 @@
-FORGE_FILEPATH!"$HOME/.dot"
+FORGE_FILEPATH="$HOME/.dot"
 ENV_FILEPATH="$HOME/.config/env"
 GITHUB_REPO="git@github.com:thomaslacour/dot.git"
 readonly SSH_KEY_GITHUB="$HOME/.ssh/github"
@@ -37,8 +37,10 @@ fi
 ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 echo ":: git clone $REPO in $FORGE_FILEPATH"
+rm -rf $FORGE_FILEPATH
+mkdir -p $FORGE_FILEPATH
 # git clone $REPO $TMPDIR
-git clone $REPO $FORGE_FILEPATH --bare
+/usr/bin/git clone $GITHUB_REPO $FORGE_FILEPATH --bare
 
 dot() {
   git --git-dir="$FORGE_FILEPATH" --work-tree="$HOME" "$@"
@@ -49,20 +51,25 @@ dot() {
 
 # rm -rf $TMPDIR
 
-echo "git remote set-url origin $GITHUB_REPO"
-dot remote set-url origin $GITHUB_REPO
-dot push --set-upstream origin main
-
 echo ":: git config ..."
-dot config --local status.showUntrackedFiles no
+dot symbolic-ref HEAD refs/heads/main
 dot config user.email $MAIL
 dot config user.name $USERNAME
+dot config --local status.showUntrackedFiles no
+dot remote set-url origin $GITHUB_REPO
+dot push --set-upstream origin main
+# dot branch --set-upstream-to=origin/main main
+dot reset
 
 echo ":: backup your files on branch 'backup' ..."
-dot switch -c backup
-dot add -u
-dot commit -m "backup"
-dot checkout main
+# dot stash
+# dot stash branch backup
+# dot add -u
+# dot commit -m "backup"
+# dot switch main
+# # dot reset --hard HEAD
+# dot switch backup
 
 
-chmod +x ~/.local/bin/pkg.sh
+chmod +x $HOME/.local/bin/pkg.sh
+source $HOME/.config/bash/bashrc

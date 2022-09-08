@@ -1,6 +1,11 @@
-# -- completion:git
+# -- completion:bash
 if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion
+fi
+
+# # -- completion:git
+if [ -f /usr/share/bash-completion/completions/git ]; then
+    source /usr/share/bash-completion/completions/git
 fi
 
 # -- completion:SSH
