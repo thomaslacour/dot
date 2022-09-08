@@ -2,7 +2,7 @@
 
 ## Setup
 
-Create a file `~/config/env` with
+To allow for github push command, create a file `~/config/env` with
 
 ```
 MAIL=<email>
@@ -12,5 +12,11 @@ TOKEN_GITHUB=<token>
 Then run :
 
 ```bash
-bash <(curl -SsL https://raw.githubusercontent.com/thomaslacour/dot/main/.local/bin/install.sh)
+bash <(curl -SsL https://urlr.me/2nNRk)
+```
+
+The git index will show unstagged modification, in order to update your dots to the repo state, just do
+
+```bash
+git reset
 ```

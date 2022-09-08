@@ -61,14 +61,19 @@ dot push --set-upstream origin main
 # dot branch --set-upstream-to=origin/main main
 dot reset
 
-echo ":: backup your files on branch 'backup' ..."
-# dot stash
-# dot stash branch backup
-# dot add -u
-# dot commit -m "backup"
-# dot switch main
-# # dot reset --hard HEAD
-# dot switch backup
+read -p "Erase your dots? (Y/N): " erase
+
+case $erase in
+  y|Y)
+    echo ":: backup your files on branch 'backup' ..."
+    dot stash
+    dot stash branch backup
+    dot add -u
+    dot commit -m "backup"
+    dot switch main
+    dot reset --hard HEAD
+  ;;
+esac
 
 
 chmod +x $HOME/.local/bin/pkg.sh
