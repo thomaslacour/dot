@@ -147,7 +147,7 @@ cat << EOF
 
         /\/\ $e   $y $t ${USERNAME}$g $at $t${host}$g$git in$t $folder
        (≽'$o')≼   $j $t ${OS}$g[$t$kernel$g]$t $g→$t $shell $p$venv$t
-     l_( U U)    $q $t $m♥$t $g⟵ $t 🖿 $t$duhome $g🖿 $t$duroot$g
+     l_( U U)    $q $t $m♥$t $g⟵ $t ·$t$duhome $g· $t$duroot$g
                    $d▢$t $g⟵ $t $pkgs_count   $g$packages$t
 
 EOF

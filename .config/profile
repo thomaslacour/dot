@@ -2,18 +2,23 @@
 # │ ~/.config/profile
 # └───────────────────────── ─ ─   ─
 
+# ····· set lang
+setxkbmap fr
+export LANGUAGE="fr_FR:fr"
+
+# ····· XDG specification
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 
 # ····· do nothing if not interactive
 #       avoid issues at login
 #       VIM TERMINAL IS NOT INTERACTIVE BY DEFAULT
 [[ $- != *i* ]] && return
 
-# ····· profile directory
-#
-p=$HOME"/.config/profile.d"
-
 # ····· load profile files
-#
+p=$HOME"/.config/profile.d"
 if [ -d $p ] ; then
     for file in $p/*.sh ; do
       source $file >/dev/null 2>&1
@@ -22,7 +27,6 @@ if [ -d $p ] ; then
 fi
 
 # ····· load shell config files
-#
 case $(echo $SHELL | sed "s/.*\///g") in
     bash) # if bash
         source $XDG_CONFIG_HOME"/bash/bashrc"

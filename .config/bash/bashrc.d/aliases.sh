@@ -2,7 +2,7 @@
 # │ ~/.config/bashrc.d/aliases.sh
 # └───────────────────────── ─ ─   ─
 
-# 🛡damage prevention
+# damage prevention
 alias chmod='chmod --preserve-root'
 alias dd='echo "no dd command available (disabled in aliases)"'
 
@@ -14,23 +14,6 @@ alias repos='grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/*'
 
 # show my public ip
 alias myip='curl ipinfo.io/ip 2> /dev/null'
-
-# python
-# python () { "$PYTHONVER" "$@"; }
-ipython () { ipython3 --no-banner --colors='NoColor' --no-confirm-exit --autoindent -- "$@"; }
-# pip () { "$PYTHONVER" -m pip "$1" --user "$2"; }
-venv_state=false
-function toggle_venv {
-  if [ "$venv_state" = false ]
-  then
-    pyenv deactivate &> /dev/null
-    pyenv activate
-    venv_state=true
-  else
-    pyenv deactivate
-    venv_state=false
-  fi
-}
 
 # ls commands
 alias ls-pip-packages="find $VIRTUAL_ENV/* -maxdepth 4 -name __init__.py 2> /dev/null"
@@ -93,6 +76,9 @@ refresh () {
   # fi
   esac
 }
+
+
+alias git_branch="git rev-parse --abbrev-ref HEAD 2> /dev/null"
 
 git() {
   if [ "$PWD" == "$HOME" ] ; then

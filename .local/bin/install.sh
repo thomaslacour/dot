@@ -1,4 +1,6 @@
+FORGE_FILEPATH!"$HOME/.dot"
 ENV_FILEPATH="$HOME/.config/env"
+GITHUB_REPO="git@github.com:thomaslacour/dot.git"
 readonly SSH_KEY_GITHUB="$HOME/.ssh/github"
 
 if [ ! -f "$ENV_FILEPATH" ]; then
@@ -24,7 +26,8 @@ fi
 # install usefull packages
 sudo apt -qq update > /dev/null 2>&1
 sudo apt upgrade -y > /dev/null 2>&1
-sudo apt -qq install -y git vim openssh-client curl > /dev/null 2>&1
+sudo apt -qq install -y vim openssh-client curl > /dev/null 2>&1
+sudo apt -qq install -y git bash-completion > /dev/null 2>&1
 
 # prepare ssh key
 if [ ! -f "$SSH_KEY_GITHUB" ]; then
@@ -33,21 +36,21 @@ if [ ! -f "$SSH_KEY_GITHUB" ]; then
 fi
 ssh-keygen -F github.com > /dev/null 2>&1 || ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-echo ":: git clone $REPO in $TMP"
-git clone $REPO $TMPDIR
+echo ":: git clone $REPO in $FORGE_FILEPATH"
+# git clone $REPO $TMPDIR
+git clone $REPO $FORGE_FILEPATH --bare
 
 dot() {
-  git --git-dir=.dot --work-tree=. "$@"
+  git --git-dir="$FORGE_FILEPATH" --work-tree="$HOME" "$@"
 }
 
-rm -rf .dot
-mv "$TMPDIR/.git" .dot
+# rm -rf .dot
+# mv "$TMPDIR/.git" .dot
 
-rm -rf $TMPDIR
+# rm -rf $TMPDIR
 
-echo "git remote set-url origin git@github.com:thomaslacour/dot.git"
-dot remote set-url origin git@github.com:thomaslacour/dot.git
-dot remote set-url origin git@github.com:thomaslacour/dot.git
+echo "git remote set-url origin $GITHUB_REPO"
+dot remote set-url origin $GITHUB_REPO
 dot push --set-upstream origin main
 
 echo ":: git config ..."
@@ -60,3 +63,6 @@ dot switch -c backup
 dot add -u
 dot commit -m "backup"
 dot checkout main
+
+
+chmod +x ~/.local/bin/pkg.sh

@@ -5,8 +5,10 @@
 # Bash prompt for the readline
 
 
-# ····· options
-SHOW_GIT_IN_PS1=1
+# ····· default options
+PROMPT_OPT_GIT_IN_PS1=1
+PROMPT_OPT_SHORT_PS1=0
+PROMPT_OPT_SIMPLE_PS1=0
 
 
 # \1 and \2 are escape sequence for "set bind ..."
@@ -26,10 +28,23 @@ seconds2days() {
   printf "%.fs" $(($1%60))
 }
 
-
 # ····· concat infos for git status in prompt
 git_add_to_st() { if [ "$1" -ne 0 ] ; then git_st+=" $1$2" ; fi ; }
 
+
+# ····· the prompt
+toggle_prompt() {
+  if [ $PROMPT_OPT_SHORT_PS1 == "0" ] ; then
+    PROMPT_OPT_SHORT_PS1=1
+  else
+    PROMPT_OPT_SHORT_PS1=0
+  fi
+  return 0
+}
+bind -x '";p": toggle_prompt "\C-v\C-j"'
+
+
+# ····· the prompt
 prompt_command() {
 
   local status="$?"
@@ -39,7 +54,7 @@ prompt_command() {
   local is_venv="$([[ "$VIRTUAL_ENV" ]] && echo venv)"
 
   local dircolor=`_c 239`
-  local envcolor=`_c 77` # 77 165
+  local envcolor=`_c 2` # 77 165
   local gitcolor=`_c 138`
   local errcolor=`_c 197`
   local timcolor=`_c 208`
@@ -48,15 +63,14 @@ prompt_command() {
 
 
   # --------------------------- current directory or "~" if home
-  # 🖿  🗀   ꗃ ⧗ ⛨
+  # ⧗ ꗃ 
+
   local enddir=""
-  local dir_ico="/"
   [[ -w `pwd` ]] && enddir+="" || enddir+=""
   enddir+=$(pwd | sed "s/.*\///g" | sed "s/$USER/\~/g" )
   if [ $PWD == "/" ] ; then
-    [[ -n "$is_root" ]] && enddir+="~"
+    [[ -n "$is_root" ]] && enddir+="~" || enddir+="/"
   fi
-  enddir+=${dir_ico}
 
 
   # --------------------------- icon
@@ -66,7 +80,7 @@ prompt_command() {
 
   # --------------------------- git
   local total_local=0
-  if [ -n "$is_git_repo" -a "${SHOW_GIT_IN_PS1}" == "1" ]; then
+  if [ -n "$is_git_repo" -a "${PROMPT_OPT_GIT_IN_PS1}" == "1" ]; then
 
     local git_st git_branch
     local untracked modified stagged deleted
@@ -78,13 +92,19 @@ prompt_command() {
     if [ "$(git rev-list --walk-reflogs --count refs/stash 2> /dev/null)" != "" ] ; then
       git_branch="[\1\033[3m\2$git_branch\1\033[23m\2]"
     else
-      git_branch="[$git_branch]"
+      if [ "$git_branch" == "master" ] || [ "$git_branch" == "main" ] ; then
+        git_branch=""
+      elif [ "$git_branch" == "HEAD" ] ; then
+        git_branch="[Head]"
+      else
+        git_branch="[$git_branch]"
+      fi
     fi
 
     untracked=$(git status --porcelain 2>/dev/null | \grep -c '^??')
-    modified=$(git ls-files --modified `git rev-parse --show-cdup` | wc -l)
-    stagged=$(git diff --staged --name-status | wc -l)
-    deleted=$(git status --porcelain | grep '^ D .*$' | wc -l)
+    modified=$(git ls-files --modified `git rev-parse --show-cdup` 2>/dev/null | wc -l)
+    stagged=$(git diff --staged --name-status 2>/dev/null | wc -l)
+    deleted=$(git status --porcelain 2>/dev/null | grep '^ D .*$' | wc -l)
 
     stash=$(git stash list 2> /dev/null | wc -l)
 
@@ -111,7 +131,7 @@ prompt_command() {
     # if nothing to show, show nothing about git
     total_local=$(($untracked + $modified + $stagged + $deleted))
     if [ $total_local -ne 0 ] ; then
-      enddir=
+      enddir+=" "
     else
       git_branch=
     fi
@@ -121,7 +141,6 @@ prompt_command() {
 
   # --------------------------- classical PS1 if home
   if [ "${PWD}" == "${HOME}" ] && [ $total_local -eq 0 ] ; then
-  # if [ $total_local -eq 0 ] ; then
     ico="[$USER@$HOSTNAME]"
   fi
 
@@ -137,25 +156,37 @@ prompt_command() {
     timer_show=
   fi
 
+  # --------------------------- classical PS1 if opt
+  if [ "${PROMPT_OPT_SHORT_PS1}" == 0 ] ; then
+    ico="[$USER@$HOSTNAME]"
+  fi
+  if [ "${PROMPT_OPT_SIMPLE_PS1}" == 1 ] ; then
+    enddir="$"
+    git_branch=
+    git_st=
+  fi
+
 
   # --------------------------- PS1
-  # ⟵-- ┄─🡲 🡢 ─⟶
-  begin="    "
-  arrow=" "
-  p1="$begin$ico $enddir$git_branch$git_st$timer_show$arrow"
-  p256="$begin$ico\1$dircolor\2 $enddir$git_branch\1$gitcolor\2$git_st\1$timcolor\2$timer_show$arrow"
+  p1="    $ico $enddir$git_branch$git_st$timer_show  "
+  p256="    $ico\1$dircolor\2 $enddir$git_branch\1$gitcolor\2$git_st\1$timcolor\2$timer_show  "
   bind "set vi-cmd-mode-string \1\033[00m\2\1\033[2m\2$p1\1\033[00m\2\1\033[1m\2"
-  export PS1="\n"
+  export PS1="\n→  "
+  # export PS2="\n"
 
 
   # --------------------------- python venv (color)
+  bind "set vi-ins-mode-string \1\033[00m\2\1\033[38;5;93m\2$p256\1\033[00m\2"
+  if [ -n "$is_root" ] ; then
+    bind "set vi-ins-mode-string \1\033[00m\2\1\033[38;5;13m\2$p256\1\033[00m\2"
+  fi
   if [ -n "$is_venv" ]; then
     export PYVENV="(${VIRTUAL_ENV##*/})"
-    bind "set vi-ins-mode-string \1\033\2\1[00m$envcolor\2$p256\1\033[00m\2"
+    # green
+    # bind "set vi-ins-mode-string \1\033\2\1[00m\033[38;5;112m\2$p256\1\033[00m\2"
   else
     PYTHONVER="$(ls /usr/bin | grep '^python3\.*$')"
     export PYVENV=
-    bind "set vi-ins-mode-string \1\033[00m\2\1\033[38;5;32m\2$p256\1\033[00m\2"
   fi
 
 
@@ -165,11 +196,9 @@ prompt_command() {
     bind "set vi-ins-mode-string \1\033[00m\2\1\033[38;5;197m\2$p256\1\033[00m\2"
   fi
 
-
   # --------------------------- save last PWD
   if ! [ -n "$is_root" ] ; then
-    mkdir -p $XDG_CACHE_HOME/bash
-    pwd > $XDG_CACHE_HOME/bash/lastdirectory
+    pwd > ~/.cache/bash.lastdirectory
   fi
 
   unset ico_git j p
@@ -180,6 +209,3 @@ trap 'timer_start' DEBUG
 export PROMPT_COMMAND=prompt_command
 
 
-
-# ····· sudo prompt !
-# export SUDO_PROMPT='    [%p@%h]  '

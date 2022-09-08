@@ -1,6 +1,7 @@
 # -- completion:git
-source /usr/share/bash-completion/completions/git
-
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+fi
 
 # -- completion:SSH
 #       Add tab completion for SSH hostnames based

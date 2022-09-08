@@ -21,6 +21,9 @@ export LESSHISTFILE=-
 export TERM=xterm-256color
 export GREP_COLORS='38;5;200'
 
+# ····· ssh
+export SSH_CONFIG="$XDG_CONFIG_HOME/ssh/config"
+
 # ····· x11
 # export USERXSESSION="$XDG_CACHE_HOME/X11/xsession"
 # export USERXSESSIONRC="$XDG_CACHE_HOME/X11/xsessionrc"

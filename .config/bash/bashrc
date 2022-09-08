@@ -3,9 +3,6 @@
 # │ ~/.config/bash/bashrc
 # └───────────────────────── ─ ─   ─
 
-# //// If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
 # //// macros
 _source () { [ -f $1 ] && source $1; }
 _bind () { [ -f $1 ] && bind -f $1; }
