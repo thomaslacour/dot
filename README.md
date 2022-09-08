@@ -14,9 +14,3 @@ Then run :
 ```bash
 bash <(curl -SsL https://urlr.me/2nNRk)
 ```
-
-The git index will show unstagged modification, in order to update your dots to the repo state, just do
-
-```bash
-git reset
-```
