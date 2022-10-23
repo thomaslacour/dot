@@ -1,12 +1,8 @@
-# -- completion:bash
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
-fi
+_source () { [ -f $1 ] && source $1; }
 
-# # -- completion:git
-if [ -f /usr/share/bash-completion/completions/git ]; then
-    source /usr/share/bash-completion/completions/git
-fi
+# -- completion
+_source /etc/profile.d/bash_completion.sh
+
 
 # -- completion:SSH
 #       Add tab completion for SSH hostnames based

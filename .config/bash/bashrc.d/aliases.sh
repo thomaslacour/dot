@@ -6,7 +6,7 @@
 alias chmod='chmod --preserve-root'
 alias dd='echo "no dd command available (disabled in aliases)"'
 
-# show my mf*path
+## show my mf*path
 alias path='echo $PATH | tr : \\n'
 
 # show my repo for apt
@@ -24,7 +24,7 @@ alias ls-lightdm-conf-files="find / -name 'lightdm' 2> /dev/null"
 alias ~="cd ~"
 alias ..="cd .."
 alias ...="cd ../.."
-alias .="dir"
+#alias .="dir"  # problems with bash completions
 alias q="exit"
 
 # colors
