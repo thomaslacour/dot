@@ -78,16 +78,6 @@ refresh () {
 }
 
 
-alias git_branch="git rev-parse --abbrev-ref HEAD 2> /dev/null"
-
-git () {
-  if [ "$PWD" == "$HOME" ] ; then
-    /usr/bin/git --git-dir=$HOME/.dot --work-tree=$HOME "$@"
-  else
-    /usr/bin/git "$@"
-  fi
-}
-
 pkg () {
   pkg.sh ${@}
 }
